@@ -5,6 +5,7 @@ const { configureExpress } = require('./config/express');
 const { configureSession } = require('./config/session');
 const { initializeDatabase } = require('./utils/database');
 const { startServer } = require('./utils/server');
+const { setCurrentUser } = require('./middleware/auth');
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ initializeDatabase().catch(err => {
 configureExpress(app);
 
 app.use(configureSession());
+
+// Apply the attachUser middleware AFTER session middleware but BEFORE routes
+app.use(setCurrentUser);
 
 app.use("/", router);
 

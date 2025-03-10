@@ -163,33 +163,10 @@
         </div>
       </form>
     </div>
-    
-    <!-- Bottom section: Quick links -->
-    <div class="bg-white border border-gray-200 rounded-lg p-6 md:col-span-3">
-      <h3 class="text-lg font-medium mb-4">Quick Links</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <a href="/guides" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-          <h4 class="font-medium">View Guides</h4>
-          <p class="text-sm text-gray-500">Browse all available drift guides</p>
-        </a>
-        
-        <% if (user.role === 'admin') { %>
-          <a href="/guides/admin/create" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-            <h4 class="font-medium">Create Guide</h4>
-            <p class="text-sm text-gray-500">Create a new drift guide</p>
-          </a>
-          
-          <a href="/guides/admin/all" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-            <h4 class="font-medium">Manage Guides</h4>
-            <p class="text-sm text-gray-500">View and manage all guides</p>
-          </a>
-        <% } %>
-      </div>
-    </div>
   </div>
   
   <!-- Avatar selection modal (initially hidden) -->
-  <div id="avatar-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+  <div id="avatar-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-50	 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg max-w-md w-full p-6">
       <h3 class="text-lg font-medium text-gray-900 mb-4">Update Profile Picture</h3>
       

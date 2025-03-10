@@ -55,13 +55,12 @@
                   </div>
                   <div class="border-t border-gray-100"></div>
                   <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Profile</a>
-                  <% if (user.role === 'admin') { %>
-                    <a href="/guides/admin/all" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Manage Guides</a>
-                  <% } %>
+                  <!-- Removed guide management link for admin users -->
                   <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                 </div>
               </div>
             <% } else { %>
+              <!-- These login/register links already only appear for non-logged in users -->
               <a href="/login" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
                 Login
               </a>
@@ -102,9 +101,7 @@
             Profile
           </a>
           <% if (user.role === 'admin') { %>
-            <a href="/guides/admin/all" class="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-              Manage Guides
-            </a>
+            <!-- Removed guide management link for admin users -->
             <div class="px-3 py-2">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
                 Admin
@@ -125,6 +122,7 @@
             Sign out
           </a>
         <% } else { %>
+          <!-- These mobile login/register links already only appear for non-logged in users -->
           <a href="/login" class="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
             Login
           </a>

@@ -38,10 +38,13 @@ exports.ensureAdmin = (req, res, next) => {
  * Sets the current user in res.locals for all templates
  */
 exports.setCurrentUser = async (req, res, next) => {
+  res.locals.user = null; // Always initialize to null
+  
   if (req.session && req.session.user) {
     try {
-      // Get fresh user data including profileImage for every request
-      const freshUser = await User.findById(req.session.user.id).select('username email role profileImage');
+      // Get fresh user data for every request
+      const freshUser = await User.findById(req.session.user.id)
+        .select('-password'); // Get all fields except password
       
       if (freshUser) {
         // Update session with the latest data
@@ -50,21 +53,29 @@ exports.setCurrentUser = async (req, res, next) => {
           username: freshUser.username,
           email: freshUser.email,
           role: freshUser.role,
-          profileImage: freshUser.profileImage
+          profileImage: freshUser.profileImage || null,
+          bio: freshUser.bio || null
         };
         
+        // Make user data available to all views
         res.locals.user = req.session.user;
+        
+        // Also add isAdmin and isAuthenticated convenience flags
+        res.locals.isAuthenticated = true;
+        res.locals.isAdmin = freshUser.role === 'admin';
       } else {
-        // User no longer exists in database
-        res.locals.user = null;
+        // User no longer exists in database, clear session
+        delete req.session.user;
       }
     } catch (err) {
       console.error('Error refreshing user data:', err);
+      // Still use session data as fallback
       res.locals.user = req.session.user;
+      res.locals.isAuthenticated = true;
+      res.locals.isAdmin = req.session.user.role === 'admin';
     }
-  } else {
-    res.locals.user = null;
   }
+  
   next();
 };
 
@@ -73,7 +84,7 @@ exports.setCurrentUser = async (req, res, next) => {
  */
 exports.redirectIfAuthenticated = (req, res, next) => {
   if (req.session && req.session.user) {
-    return res.redirect('/guides');
+    return res.redirect('/'); // Changed from '/guides' to homepage
   }
   next();
 };

@@ -6,7 +6,8 @@ const User = require('../models/User'); // Add User model import
  */
 exports.getLogin = (req, res) => {
   res.render('auth/login', {
-    title: 'Login - Drift Guides'
+    title: 'Login',  // Removed "- Drift Guides"
+    error: null
   });
 };
 
@@ -15,7 +16,8 @@ exports.getLogin = (req, res) => {
  */
 exports.getRegister = (req, res) => {
   res.render('auth/register', {
-    title: 'Register - Drift Guides'
+    title: 'Register',  // Removed "- Drift Guides"
+    error: null
   });
 };
 
@@ -70,8 +72,14 @@ exports.register = async (req, res) => {
     const result = await authService.registerUser(username, email, password);
     
     if (result.success) {
-      req.session.message = 'Registration successful. Please login.';
-      return res.redirect('/login');
+      req.session.user = {
+        id: result.user._id,
+        username: result.user.username,
+        email: result.user.email,
+        role: result.user.role,
+        profileImage: result.user.profileImage
+      };
+      return res.redirect('/');
     }
     
     res.render('auth/register', {
@@ -111,13 +119,13 @@ exports.profile = async (req, res) => {
     const user = await User.findById(req.session.user.id).select('-password');
     
     res.render('auth/profile', {
-      title: 'Your Profile - Drift Guides',
+      title: 'Your Profile',  // Removed "- Drift Guides"
       user: user
     });
   } catch (error) {
     console.error('Error fetching user data:', error);
     res.render('auth/profile', {
-      title: 'Your Profile - Drift Guides',
+      title: 'Your Profile',  // Removed "- Drift Guides"
       user: req.session.user,
       error: 'Failed to load complete profile data.'
     });
@@ -134,7 +142,7 @@ exports.updateProfile = async (req, res) => {
     // Validate passwords match if changing password
     if (newPassword && newPassword !== confirmPassword) {
       return res.render('auth/profile', {
-        title: 'Your Profile - Drift Guides',
+        title: 'Your Profile',  // Removed "- Drift Guides"
         user: await User.findById(req.session.user.id).select('-password'),
         error: 'New passwords do not match.'
       });
@@ -157,7 +165,7 @@ exports.updateProfile = async (req, res) => {
       };
       
       return res.render('auth/profile', {
-        title: 'Your Profile - Drift Guides',
+        title: 'Your Profile',  // Removed "- Drift Guides"
         user: result.user,
         success: 'Profile updated successfully.'
       });
@@ -166,7 +174,7 @@ exports.updateProfile = async (req, res) => {
     // If update failed
     const user = await User.findById(req.session.user.id).select('-password');
     res.render('auth/profile', {
-      title: 'Your Profile - Drift Guides',
+      title: 'Your Profile',  // Removed "- Drift Guides"
       user: user,
       error: result.message
     });
@@ -175,7 +183,7 @@ exports.updateProfile = async (req, res) => {
     
     const user = await User.findById(req.session.user.id).select('-password');
     res.render('auth/profile', {
-      title: 'Your Profile - Drift Guides',
+      title: 'Your Profile',  // Removed "- Drift Guides"
       user: user,
       error: 'An error occurred while updating your profile.'
     });
